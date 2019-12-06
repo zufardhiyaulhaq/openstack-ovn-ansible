@@ -3,3 +3,6 @@
 - import_tasks: packages.yml
 - import_tasks: ntp.yml
 - import_tasks: firewall.yml
+- import_tasks: memcached.yml
+- import_tasks: etcd.yml
+- import_tasks: mysql.yml
