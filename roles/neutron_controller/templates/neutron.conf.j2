@@ -7,11 +7,8 @@ auth_strategy = keystone
 notify_nova_on_port_status_changes = true
 notify_nova_on_port_data_changes = true
 
-[agent]
-[cors]
-
-[database]
-connection = mysql+pymysql://neutron:{{ neutron_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}/neutron
+[oslo_concurrency]
+lock_path = /lock
 
 [keystone_authtoken]
 auth_uri = http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:5000
@@ -24,8 +21,6 @@ project_name = service
 username = neutron
 password = {{ neutron_pw }}
 
-[matchmaker_redis]
-
 [nova]
 auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:35357
 auth_type = password
@@ -36,10 +31,12 @@ project_name = service
 username = nova
 password = {{ nova_pw }}
 
-[oslo_concurrency]
-lock_path = /lock
-DEFAULT = rpc_workers
+[database]
+connection = mysql+pymysql://neutron:{{ neutron_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}/neutron
 
+[agent]
+[cors]
+[matchmaker_redis]
 [oslo_messaging_amqp]
 [oslo_messaging_kafka]
 [oslo_messaging_notifications]

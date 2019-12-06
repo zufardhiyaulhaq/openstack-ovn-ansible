@@ -52,6 +52,4 @@
   template: src=clouds.yaml.j2 dest=/etc/openstack/clouds.yaml
 
 - name: create service project
-  os_project: cloud=openstack state=present name=service description="Service Project" domain_id=default enabled=True
-  when: inventory_hostname == '{{ openstack.controller[0].hostname }}'
-  
+  os_project: cloud=openstack state=present name=service description="Service Project" domain_id=default enabled=True  

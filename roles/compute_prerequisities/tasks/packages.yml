@@ -24,3 +24,5 @@
     - chrony
     - openstack-selinux
     - python-openstackclient
+    - python2-openstacksdk
+    - python2-shade

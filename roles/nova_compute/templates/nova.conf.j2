@@ -5,8 +5,55 @@ my_ip = {{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}
 use_neutron = True
 firewall_driver = nova.virt.firewall.NoopFirewallDriver
 
+[vnc]
+enabled = True
+server_listen = 0.0.0.0
+server_proxyclient_address = {{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}
+novncproxy_base_url = http://{{ openstack.controller[0].ip_man }}:6080/vnc_auto.html
+
+[glance]
+api_servers = http://{{ openstack.controller[0].ip_man }}:9292
+
+[oslo_concurrency]
+lock_path = /var/lib/nova/tmp
+
 [api]
 auth_strategy = keystone
+
+[placement]
+os_region_name = RegionOne
+project_domain_name = Default
+project_name = service
+auth_type = password
+user_domain_name = Default
+auth_url = http://{{ openstack.controller[0].ip_man }}:5000/v3
+username = placement
+password = {{ placement_pw }}
+
+[keystone_authtoken]
+auth_url = http://{{ openstack.controller[0].ip_man }}:5000/v3
+memcached_servers = {{ openstack.controller[0].ip_man }}:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = nova
+password = {{ nova_pw }}
+
+[libvirt]
+virt_type = qemu
+
+[neutron]
+region_name = RegionOne
+project_domain_name = Default
+project_name = service
+auth_type = password
+user_domain_name = Default
+auth_url = http://{{ openstack.controller[0].ip_man }}:35357
+url = http://{{ openstack.controller[0].ip_man }}:9696
+username = neutron
+password = {{ neutron_pw }}
+
 [api_database]
 [barbican]
 [cache]
@@ -22,51 +69,17 @@ auth_strategy = keystone
 [devices]
 [ephemeral_storage_encryption]
 [filter_scheduler]
-
-[glance]
-api_servers = http://{{ openstack.controller[0].ip_man }}:9292
-
 [guestfs]
 [healthcheck]
 [hyperv]
 [ironic]
 [key_manager]
 [keystone]
-
-[keystone_authtoken]
-auth_url = http://{{ openstack.controller[0].ip_man }}:5000/v3
-memcached_servers = {{ openstack.controller[0].ip_man }}:11211
-auth_type = password
-project_domain_name = Default
-user_domain_name = Default
-project_name = service
-username = nova
-password = {{ nova_pw }}
-
-[libvirt]
-virt_type = qemu
-
 [matchmaker_redis]
 [metrics]
 [mks]
-
-[neutron]
-region_name = RegionOne
-project_domain_name = Default
-project_name = service
-auth_type = password
-user_domain_name = Default
-auth_url = http://{{ openstack.controller[0].ip_man }}:35357
-url = http://{{ openstack.controller[0].ip_man }}:9696
-username = neutron
-password = {{ neutron_pw }}
-
 [notifications]
 [osapi_v21]
-
-[oslo_concurrency]
-lock_path = /var/lib/nova/tmp
-
 [oslo_messaging_amqp]
 [oslo_messaging_kafka]
 [oslo_messaging_notifications]
@@ -75,17 +88,6 @@ lock_path = /var/lib/nova/tmp
 [oslo_middleware]
 [oslo_policy]
 [pci]
-
-[placement]
-os_region_name = RegionOne
-project_domain_name = Default
-project_name = service
-auth_type = password
-user_domain_name = Default
-auth_url = http://{{ openstack.controller[0].ip_man }}:5000/v3
-username = placement
-password = {{ placement_pw }}
-
 [quota]
 [rdp]
 [remote_debug]
@@ -97,13 +99,6 @@ password = {{ placement_pw }}
 [vault]
 [vendordata_dynamic_auth]
 [vmware]
-
-[vnc]
-enabled = True
-server_listen = 0.0.0.0
-server_proxyclient_address = {{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}
-novncproxy_base_url = http://{{ openstack.controller[0].ip_man }}:6080/vnc_auto.html
-
 [workarounds]
 [wsgi]
 [xenserver]

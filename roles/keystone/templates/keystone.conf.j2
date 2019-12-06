@@ -1,3 +1,9 @@
+[database]
+connection = mysql+pymysql://keystone:{{ keystone_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}/keystone
+
+[token]
+provider = fernet
+
 [DEFAULT]
 [application_credential]
 [assignment]
@@ -6,8 +12,6 @@
 [catalog]
 [cors]
 [credential]
-[database]
-connection = mysql+pymysql://keystone:{{ keystone_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}/keystone
 [domain_config]
 [endpoint_filter]
 [endpoint_policy]
@@ -38,8 +42,6 @@ connection = mysql+pymysql://keystone:{{ keystone_dbpw }}@{{ hostvars[inventory_
 [security_compliance]
 [shadow_users]
 [signing]
-[token]
-provider = fernet
 [tokenless_auth]
 [trust]
 [unified_limit]
