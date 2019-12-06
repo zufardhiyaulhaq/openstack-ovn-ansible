@@ -19,22 +19,22 @@
   mysql_user: user=root password="{{ root_dbpw }}" host=localhost
 
 - name: Deletes anonymous MySQL server user for ansible_fqdn
-  mysql_user: user="" host="{{ ansible_fqdn }}" state="absent"
+  mysql_user: login_user=root login_password={{ root_dbpw }} user="" host="{{ ansible_fqdn }}" state="absent"
 
 - name: Deletes anonymous MySQL server user for localhost
-  mysql_user: user="" state="absent"
+  mysql_user: login_user=root login_password={{ root_dbpw }} user="" state="absent"
 
 - name: Secures the MySQL root user for IPV6 localhost (::1)
-  mysql_user: user="root" password="{{ root_dbpw }}" host="::1"
+  mysql_user: login_user=root login_password={{ root_dbpw }} user="root" password="{{ root_dbpw }}" host="::1"
 
 - name: Secures the MySQL root user for IPV4 localhost (127.0.0.1)
-  mysql_user: user="root" password="{{ root_dbpw }}" host="127.0.0.1"
+  mysql_user: login_user=root login_password={{ root_dbpw }} user="root" password="{{ root_dbpw }}" host="127.0.0.1"
 
 - name: Secures the MySQL root user for localhost domain (localhost)
-  mysql_user: user="root" password="{{ root_dbpw }}" host="localhost"
+  mysql_user: login_user=root login_password={{ root_dbpw }} user="root" password="{{ root_dbpw }}" host="localhost"
 
 - name: Secures the MySQL root user for server_hostname domain
-  mysql_user: user="root" password="{{ root_dbpw }}" host="{{ ansible_fqdn }}"
+  mysql_user: login_user=root login_password={{ root_dbpw }} user="root" password="{{ root_dbpw }}" host="{{ ansible_fqdn }}"
 
 - name: Removes the MySQL test database
   mysql_db: db=test state=absent
