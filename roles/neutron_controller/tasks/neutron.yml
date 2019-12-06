@@ -1,0 +1,153 @@
+---
+###################################
+##### Neutron Database & User #####
+###################################
+
+- name: create neutron database
+  mysql_db: login_user=root login_password={{ root_dbpw }} name=neutron state=present
+ 
+- name: grant neutron database local host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=neutron password={{ neutron_dbpw }} append_privs=true priv='neutron.*:ALL'
+
+- name: grant neutron database controller host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=neutron password={{ neutron_dbpw }} append_privs=true priv='neutron.*:ALL' host={{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}
+ 
+- name: grant neutron database all host access with shell module
+  shell: mysql -u root -p{{ root_dbpw }} -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY '{{ neutron_dbpw }}';"
+ 
+- name: grant neutron database all host access with shell module
+  shell: mysql -u root -p{{ root_dbpw }} -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}' IDENTIFIED BY '{{ neutron_dbpw }}';"
+ 
+- name: create neutron user
+  os_user: cloud=openstack state=present name=neutron password={{ neutron_pw }} update_password=on_create domain=default default_project=admin
+
+- name: grant admin role on the neutron user
+  os_user_role: cloud=openstack user=neutron role=admin project=service
+ 
+- name: create neutron service
+  os_keystone_service: cloud=openstack state=present name=neutron service_type=network description="OpenStack Networking Service"
+
+- name: create neutron public endpoint
+  os_keystone_endpoint: cloud=openstack service=neutron endpoint_interface=public url=http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:9696 region=RegionOne state=present
+ 
+- name: create neutron internal endpoint
+  os_keystone_endpoint: cloud=openstack service=neutron endpoint_interface=internal url=http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:9696 region=RegionOne state=present
+ 
+- name: create neutron admin endpoint
+  os_keystone_endpoint: cloud=openstack service=neutron endpoint_interface=admin url=http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:9696 region=RegionOne state=present
+ 
+#############################################
+##### Open Virtual Network Installation #####
+#############################################
+- name: install open virtual network packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - wget
+    - openssl-devel
+    - python-sphinx
+    - gcc
+    - make
+    - python-devel
+    - openssl-devel
+    - kernel-devel
+    - graphviz
+    - kernel-debug-devel
+    - autoconf
+    - automake
+    - rpm-build
+    - redhat-rpm-config
+    - libtool
+    - python-twisted-core
+    - python-zope-interface
+    - PyQt4
+    - desktop-file-utils
+    - libcap-ng-devel
+    - groff
+    - checkpolicy
+    - selinux-policy-devel
+    - python-six
+    - gcc-c++
+    - unbound-devel
+    - unbound
+
+- name: Create rpmbuild directory
+  file:
+    path: /root/rpmbuild/SOURCES
+    state: directory
+
+- name: Download and extract openvswitch
+  unarchive:
+    src: https://www.openvswitch.org/releases/openvswitch-2.12.0.tar.gz
+    dest: /root/
+    remote_src: yes
+
+- name: Download openvswitch
+  get_url:
+    url: https://www.openvswitch.org/releases/openvswitch-2.12.0.tar.gz
+    dest: /root/rpmbuild/SOURCES/openvswitch-2.12.0.tar.gz
+
+- name: build Open vSwitch
+  shell: cd /root && rpmbuild -bb --nocheck /root/openvswitch-2.12.0/rhel/openvswitch-fedora.spec
+
+- name: build Open Virtual Network
+  shell: cd /root && rpmbuild -bb --nocheck /root/openvswitch-2.12.0/rhel/ovn-fedora.spec
+
+- name: install open virtual network packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - /root/rpmbuild/RPMS/x86_64/openvswitch-2.12.0-1.el7.x86_64.rpm
+    - /root/rpmbuild/RPMS/x86_64/ovn-2.12.0-1.el7.x86_64.rpm
+    - /root/rpmbuild/RPMS/x86_64/ovn-central-2.12.0-1.el7.x86_64.rpm
+    - /root/rpmbuild/RPMS/x86_64/ovn-common-2.12.0-1.el7.x86_64.rpm
+
+- name: create neutron server configuration file
+  template: src=ovn-northd.service.j2 dest=/usr/lib/systemd/system/ovn-northd.service
+
+- name: start openvswitch service
+  service: name=openvswitch state=started enabled=yes daemon_reload=yes
+
+- name: start ovn-northd service
+  service: name=ovn-northd state=started enabled=yes daemon_reload=yes
+ 
+
+- name: pause
+  pause:
+    minutes: 1
+
+- name: start ovn-northd service
+  service: name=ovn-northd state=started enabled=yes daemon_reload=yes
+  when: inventory_hostname != '{{ openstack.controller[0].hostname }}'
+
+################################
+##### Neutron Installation #####
+################################
+
+- name: install neutron packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - openstack-neutron
+    - openstack-neutron-ml2
+    - python-networking-ovn
+
+- name: create neutron server configuration file
+  template: src=neutron.conf.j2 dest=/etc/neutron/neutron.conf
+
+- name: create neutron ml2 plugin configuration file
+  template: src=ml2_conf.ini.j2 dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+  
+- name: create ml2 plugin symbolic link
+  file: path=/etc/neutron/plugin.ini src=/etc/neutron/plugins/ml2/ml2_conf.ini state=link
+
+- name: neutron db sync
+  shell: neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head
+  become: yes
+  become_user: neutron
+
+- name: restart openstack-nova-api service
+  service: name=openstack-nova-api state=restarted enabled=yes
+
+- name: restart neutron-server service
+  service: name=neutron-server state=restarted enabled=yes

@@ -1,0 +1,57 @@
+---
+- name: create keystone database
+  mysql_db: login_user=root login_password={{ root_dbpw }} name=keystone state=present
+
+- name: grant keystone database local host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=keystone password={{ keystone_dbpw }} append_privs=true priv='keystone.*:ALL'
+
+- name: grant keystone database controller host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=keystone password={{ keystone_dbpw }} append_privs=true priv='keystone.*:ALL' host={{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}
+
+- name: grant keystone database any host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=keystone password={{ keystone_dbpw }} append_privs=true priv='keystone.*:ALL' host=%
+
+- name: install required packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - openstack-keystone
+    - httpd
+    - mod_wsgi
+
+- name: create keystone configuration file
+  template: src=keystone.conf.j2 dest=/etc/keystone/keystone.conf
+
+- name: populate keystone database
+  shell: keystone-manage db_sync
+  become: yes
+  become_user: keystone
+
+- name: initialize fernet
+  shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+
+- name: initialize credential
+  shell: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+
+- name: bootstrap keystone
+  shell: keystone-manage bootstrap --bootstrap-password {{ admin_pw }} --bootstrap-admin-url http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:5000/v3/ --bootstrap-internal-url http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:5000/v3/ --bootstrap-public-url http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:5000/v3/ --bootstrap-region-id RegionOne
+
+- name: create wsgi keystone configuration file
+  shell: ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/
+
+- name: start httpd service
+  service: name=httpd state=restarted enabled=yes
+  
+- name: create os client env script
+  template: src=admin_rc.j2 dest=/root/admin_rc
+
+- name: create openstack directory
+  file: path=/etc/openstack state=directory mode=0755
+  
+- name: create clouds.yaml
+  template: src=clouds.yaml.j2 dest=/etc/openstack/clouds.yaml
+
+- name: create service project
+  os_project: cloud=openstack state=present name=service description="Service Project" domain_id=default enabled=True
+  when: inventory_hostname == '{{ openstack.controller[0].hostname }}'
+  

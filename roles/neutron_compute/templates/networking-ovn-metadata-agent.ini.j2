@@ -1,0 +1,9 @@
+[DEFAULT]
+nova_metadata_host = {{ openstack.controller[0].ip_man }}
+metadata_proxy_shared_secret = {{ metadata_secret }}
+
+[ovs]
+ovsdb_connection = unix:/var/run/openvswitch/db.sock
+
+[ovn]
+ovn_sb_connection = tcp:{{ openstack.controller[0].ip_man }}:6642

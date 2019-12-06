@@ -1,0 +1,40 @@
+---
+- name: install required packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - MySQL-python
+    - mariadb
+    - mariadb-server
+    - python2-PyMySQL
+
+- name: configure mysql
+  template: src=openstack.cnf.j2 dest=/etc/my.cnf.d/openstack.cnf
+  notify: restart mysql
+
+- name: start mysql
+  service: name=mariadb state=started enabled=yes
+
+- name: Sets the root password 
+  mysql_user: user=root password="{{ DBROOT_PASS }}" host=localhost
+
+- name: Deletes anonymous MySQL server user for ansible_fqdn
+  mysql_user: user="" host="{{ ansible_fqdn }}" state="absent"
+
+- name: Deletes anonymous MySQL server user for localhost
+  mysql_user: user="" state="absent"
+
+- name: Secures the MySQL root user for IPV6 localhost (::1)
+  mysql_user: user="root" password="{{ DBROOT_PASS }}" host="::1"
+
+- name: Secures the MySQL root user for IPV4 localhost (127.0.0.1)
+  mysql_user: user="root" password="{{ DBROOT_PASS }}" host="127.0.0.1"
+
+- name: Secures the MySQL root user for localhost domain (localhost)
+  mysql_user: user="root" password="{{ DBROOT_PASS }}" host="localhost"
+
+- name: Secures the MySQL root user for server_hostname domain
+  mysql_user: user="root" password="{{ DBROOT_PASS }}" host="{{ ansible_fqdn }}"
+
+- name: Removes the MySQL test database
+  mysql_db: db=test state=absent

@@ -1,0 +1,33 @@
+openstack_controller: 1
+openstack_compute: 3
+
+openstack:
+  controller:
+    - hostname: zu-ovn-controller0
+      ip_man: 10.100.100.200
+  compute:
+    - hostname: zu-ovn-compute0
+      ip_man: 10.100.100.203
+      ip_data: 10.201.201.203
+    - hostname: zu-ovn-compute1
+      ip_man: 10.100.100.204
+      ip_data: 10.201.201.204
+    - hostname: zu-ovn-compute2
+      ip_man: 10.100.100.205
+      ip_data: 10.201.201.205
+
+gateway_ip: 10.100.100.1
+dns_ip: 8.8.8.8
+
+root_dbpw: DBROOT_PASS
+rabbitmq_pw: RABBIT_PASS
+keystone_dbpw: KEYSTONE_DBPASS
+admin_pw: ADMIN_PASS
+glance_dbpw: GLANCE_DBPASS
+glance_pw: GLANCE_PASS
+nova_dbpw: NOVA_DBPASS
+nova_pw: NOVA_PASS
+placement_pw: PLACEMENT_PASS
+neutron_dbpw: NEUTRON_DBPASS
+neutron_pw: NEUTRON_PASS
+metadata_secret: METADATA_SECRET

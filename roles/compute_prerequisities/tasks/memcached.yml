@@ -1,0 +1,15 @@
+---
+
+- name: install memcached
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - memcached
+    - python-memcached
+
+- name: configure memcached
+  template: src=memcached.j2 dest=/etc/sysconfig/memcached
+  notify: restart memcached
+
+- name: start memcached
+  service: name=memcached state=started enabled=yes

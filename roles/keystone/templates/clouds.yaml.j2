@@ -1,0 +1,10 @@
+clouds:
+  openstack:
+    auth:
+      username: admin
+      project_name: admin
+      password: {{ admin_pw }}
+      auth_url: http://{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:5000/v3
+      user_domain_name: default
+      project_domain_name: default
+    identity_api_version: 3
