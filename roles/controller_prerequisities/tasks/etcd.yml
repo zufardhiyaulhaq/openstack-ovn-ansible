@@ -1,4 +1,10 @@
 ---
+- name: install required packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - etcd
+
 - name: configure etcd
   template: src=etcd.conf.j2 dest=/etc/etcd/etcd.conf
   notify: restart etcd
