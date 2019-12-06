@@ -35,10 +35,10 @@ Interface Management (eth0) : 10.100.100.210
 ```
 nano /etc/hosts
 
-10.100.100.200 zu-ovn-controller1
-10.100.100.203 zu-ovn-compute1
-10.100.100.204 zu-ovn-compute2
-10.100.100.205 zu-ovn-compute3
+10.100.100.200 zu-ovn-controller0
+10.100.100.203 zu-ovn-compute0
+10.100.100.204 zu-ovn-compute1
+10.100.100.205 zu-ovn-compute2
 ```
 - Setup and copy key from bootstrap node to all nodes
 ```
