@@ -1,2 +1,2 @@
 ---
-- import_tasks: keystone.yml
+- import_tasks: glance.yml
