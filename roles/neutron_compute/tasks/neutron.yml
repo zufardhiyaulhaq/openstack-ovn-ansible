@@ -61,9 +61,9 @@
   vars:
     packages:
     - /root/rpmbuild/RPMS/x86_64/openvswitch-2.12.0-1.el7.x86_64.rpm
+    - /root/rpmbuild/RPMS/x86_64/openvswitch-devel-2.12.0-1.el7.x86_64.rpm
     - /root/rpmbuild/RPMS/x86_64/ovn-2.12.0-1.el7.x86_64.rpm
     - /root/rpmbuild/RPMS/x86_64/ovn-host-2.12.0-1.el7.x86_64.rpm
-    - /root/rpmbuild/RPMS/x86_64/ovn-common-2.12.0-1.el7.x86_64.rpm
 
 - name: install neutron packages
   yum: name="{{ packages }}" state=latest
