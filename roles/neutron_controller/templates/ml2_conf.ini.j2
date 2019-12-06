@@ -26,8 +26,8 @@ vxlan_group = 224.0.0.1
 enable_security_group = true
 
 [ovn]
-ovn_nb_connection = tcp:{{ neutron_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:6641
-ovn_sb_connection = tcp:{{ neutron_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:6642
+ovn_nb_connection = tcp:{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:6641
+ovn_sb_connection = tcp:{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:6642
 ovn_l3_scheduler = leastloaded
 enable_distributed_floating_ip = true
 ovn_metadata_enabled = true

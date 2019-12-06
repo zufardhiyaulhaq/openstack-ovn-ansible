@@ -106,19 +106,14 @@
   template: src=ovn-northd.service.j2 dest=/usr/lib/systemd/system/ovn-northd.service
 
 - name: start openvswitch service
-  service: name=openvswitch state=started enabled=yes daemon_reload=yes
+  service: name=openvswitch state=restarted enabled=yes daemon_reload=yes
 
 - name: start ovn-northd service
-  service: name=ovn-northd state=started enabled=yes daemon_reload=yes
+  service: name=ovn-northd state=restarted enabled=yes daemon_reload=yes
  
-
 - name: pause
   pause:
     minutes: 1
-
-- name: start ovn-northd service
-  service: name=ovn-northd state=started enabled=yes daemon_reload=yes
-  when: inventory_hostname != '{{ openstack.controller[0].hostname }}'
 
 ################################
 ##### Neutron Installation #####
