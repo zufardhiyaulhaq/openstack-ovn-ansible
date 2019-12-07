@@ -4,7 +4,7 @@ ONBOOT=yes
 DEVICE=br-provider
 NAME=br-provider
 DEVICETYPE=ovs
-OVSBOOTPROTO=none
+OVSBOOTPROTO=OpenFlow13
 TYPE=OVSBridge
-OVS_EXTRA="set bridge provider fail_mode=standalone"
+OVS_EXTRA="set bridge br-provider fail_mode=standalone"
 MTU=9000

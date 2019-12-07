@@ -85,7 +85,7 @@
   shell: ovs-vsctl set open . external-ids:ovn-encap-ip={{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }} 
 
 - name: create br-provider interface configuration file
-  template: src=ifcfg-br-provider.j2 dest=/etc/sysconfig/network-scripts/ifcfg-br-brovider
+  template: src=ifcfg-br-provider.j2 dest=/etc/sysconfig/network-scripts/ifcfg-br-provider
 
 - name: create eth2 interface configuration file
   template: src=ifcfg-eth2.j2 dest=/etc/sysconfig/network-scripts/ifcfg-eth2
