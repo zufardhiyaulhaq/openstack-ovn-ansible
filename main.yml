@@ -40,3 +40,8 @@
   roles:
   - horizon
 
+- name: Discover host Nova
+  hosts: controllers
+  roles:
+  - after_openstack
+
