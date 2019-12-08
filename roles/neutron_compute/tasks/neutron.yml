@@ -84,6 +84,9 @@
 - name: config openvswitch
   shell: ovs-vsctl set open . external-ids:ovn-encap-ip={{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }} 
 
+- name: Enable l3ha support for compute
+  shell: ovs-vsctl set open . external-ids:ovn-cms-options=enable-chassis-as-gw
+
 - name: create br-provider interface configuration file
   template: src=ifcfg-br-provider.j2 dest=/etc/sysconfig/network-scripts/ifcfg-br-provider
 
