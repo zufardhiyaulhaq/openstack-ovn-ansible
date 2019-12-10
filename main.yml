@@ -44,4 +44,5 @@
   hosts: controllers
   roles:
   - after_openstack
+  - resource_openstack
 
