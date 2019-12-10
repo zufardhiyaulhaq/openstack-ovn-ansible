@@ -56,7 +56,7 @@
   with_items: "{{ private_network }}"
 
 - name: Create Private Network Subnet
-  shell: source /root/admin_rc && openstack subnet create --subnet-range {{ item.subnet_range }} --dns-nameserver {{ item.dns }} --network internal {{ item.subnet_name }}
+  shell: source /root/admin_rc && openstack subnet create --subnet-range {{ item.subnet_range }} --dns-nameserver {{ item.dns }} --network {{ item.name }} {{ item.subnet_name }}
   with_items: "{{ private_network }}"
 
 - name: Create Router
