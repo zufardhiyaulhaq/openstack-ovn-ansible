@@ -101,6 +101,7 @@
     - /root/rpmbuild/RPMS/x86_64/openvswitch-devel-2.11.0-1.el7.x86_64.rpm
     - /root/rpmbuild/RPMS/x86_64/ovn-2.11.0-1.el7.x86_64.rpm
     - /root/rpmbuild/RPMS/x86_64/ovn-central-2.11.0-1.el7.x86_64.rpm
+    - /root/rpmbuild/RPMS/x86_64/ovn-common-2.11.0-1.el7.x86_64.rpm
 
 - name: create neutron server configuration file
   template: src=ovn-northd.service.j2 dest=/usr/lib/systemd/system/ovn-northd.service
