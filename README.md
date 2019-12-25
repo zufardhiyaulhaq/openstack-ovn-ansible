@@ -4,7 +4,7 @@ This ansible script will provisioning OpenStack with OVN (Open Virtual Network) 
 ### Tested
 - OpenStack Queens
 - 1 controller 3 compute
-- OpenvSwitch 1.12.0
+- OpenvSwitch 1.11.0
 
 ### Limitation
 - Only support single controller
