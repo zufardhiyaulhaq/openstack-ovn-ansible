@@ -8,8 +8,8 @@ After=openvswitch.service
 Type=oneshot
 RemainAfterExit=yes
 Environment=OVS_RUNDIR=%t/openvswitch OVS_DBDIR=/var/lib/openvswitch
-EnvironmentFile=-/etc/sysconfig/ovn-northd
-EnvironmentFile=/run/openvswitch.useropts
+#EnvironmentFile=-/etc/sysconfig/ovn-northd
+#EnvironmentFile=/run/openvswitch.useropts
 ExecStartPre=-/usr/bin/chown -R ${OVS_USER_ID} ${OVS_DBDIR}
 ExecStart=/usr/share/openvswitch/scripts/ovn-ctl start_northd $OVN_NORTHD_OPTS --db-nb-addr={{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }} --db-nb-create-insecure-remote=yes --db-sb-addr={{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }} --db-sb-create-insecure-remote=yes --db-nb-cluster-local-addr={{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }} --db-sb-cluster-local-addr={{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }} --ovn-northd-nb-db=tcp:{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:6641 --ovn-northd-sb-db=tcp:{{ hostvars[inventory_hostname]['ansible_eth0']['ipv4']['address'] }}:6642
 ExecStop=/usr/share/openvswitch/scripts/ovn-ctl stop_northd
