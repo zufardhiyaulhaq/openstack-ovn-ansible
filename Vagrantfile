@@ -5,11 +5,13 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
 
   (0..0).each do |i|
-    config.vm.define "zu-ovn-controller-#{i}" do |db|
-      db.vm.hostname = "zu-ovn-controller-#{i}"
-      db.vm.network 'private_network', ip: "10.200.100.20#{i}"
-      db.vm.network 'private_network', ip: "10.201.101.20#{i}"
-      db.vm.provider 'virtualbox' do |vb|
+    config.vm.define "zu-ovn-controller-#{i}" do |controller|
+      controller.vm.hostname = "zu-ovn-controller-#{i}"
+      controller.vm.network 'private_network', ip: "10.200.100.20#{i}"
+      controller.vm.network 'private_network', ip: "10.201.101.20#{i}"
+      controller.vm.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+      controller.vm.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
+      controller.vm.provider 'virtualbox' do |vb|
         vb.name = "zu-ovn-controller-#{i}"
         vb.memory = 8000
         vb.cpus = 4
@@ -18,12 +20,15 @@ Vagrant.configure('2') do |config|
   end
 
   (0..2).each do |i|
-    config.vm.define "zu-ovn-compute-#{i}" do |web|
-      web.vm.hostname = "zu-ovn-compute-#{i}"
-      web.vm.network 'private_network', ip: "10.200.100.21#{i}"
-      web.vm.network 'private_network', ip: "10.201.101.21#{i}"
-      web.vm.network 'private_network', ip: "10.201.102.21#{i}", auto_config: false
-      web.vm.provider 'virtualbox' do |vb|
+    config.vm.define "zu-ovn-compute-#{i}" do |compute|
+      compute.vm.hostname = "zu-ovn-compute-#{i}"
+      compute.vm.network 'private_network', ip: "10.200.100.21#{i}"
+      compute.vm.network 'private_network', ip: "10.201.101.21#{i}"
+      compute.vm.network 'private_network', ip: "10.201.102.21#{i}", auto_config: false
+      compute.vm.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+      compute.vm.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
+      compute.vm.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
+      compute.vm.provider 'virtualbox' do |vb|
         vb.name = "zu-ovn-compute-#{i}"
         vb.memory = 8000
         vb.cpus = 4
