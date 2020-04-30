@@ -83,7 +83,7 @@
   shell: ovs-vsctl set open . external-ids:ovn-encap-type=geneve
   
 - name: config openvswitch
-  shell: ovs-vsctl set open . external-ids:ovn-encap-ip={{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }} 
+  shell: ovs-vsctl set open . external-ids:ovn-encap-ip={{ hostvars[inventory_hostname]['ansible_eth2']['ipv4']['address'] }} 
 
 - name: Enable l3ha support for compute
   shell: ovs-vsctl set open . external-ids:ovn-cms-options=enable-chassis-as-gw
