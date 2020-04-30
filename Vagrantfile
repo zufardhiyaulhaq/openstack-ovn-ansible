@@ -9,12 +9,12 @@ Vagrant.configure('2') do |config|
       controller.vm.hostname = "zu-ovn-controller-#{i}"
       controller.vm.network 'private_network', ip: "10.200.100.20#{i}"
       controller.vm.network 'private_network', ip: "10.201.101.20#{i}"
-      controller.vm.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
-      controller.vm.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       controller.vm.provider 'virtualbox' do |vb|
         vb.name = "zu-ovn-controller-#{i}"
         vb.memory = 8000
         vb.cpus = 4
+        vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       end
     end
   end
@@ -25,13 +25,13 @@ Vagrant.configure('2') do |config|
       compute.vm.network 'private_network', ip: "10.200.100.21#{i}"
       compute.vm.network 'private_network', ip: "10.201.101.21#{i}"
       compute.vm.network 'private_network', ip: "10.201.102.21#{i}", auto_config: false
-      compute.vm.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
-      compute.vm.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
-      compute.vm.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
       compute.vm.provider 'virtualbox' do |vb|
         vb.name = "zu-ovn-compute-#{i}"
         vb.memory = 8000
         vb.cpus = 4
+        vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
       end
     end
   end
