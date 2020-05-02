@@ -6,75 +6,39 @@ This ansible script will provisioning OpenStack with OVN (Open Virtual Network) 
 - 1 controller 3 compute
 - OpenvSwitch 1.11.0
 
-### Limitation
-- Only support single controller
-```
-zu-ovn-controller0
-Interface Management (eth0) : 10.100.100.200
+### Requirement
+- virtualbox
+- vagrant
+- ansible 2.5.5
+- terraform (optional)
 
-zu-ovn-compute0
-Interface Management (eth0) : 10.100.100.203
-Interface Data       (eth1) : 10.101.101.203
-Interface External   (eth2) : no ip address
-
-zu-ovn-compute1
-Interface Management (eth0) : 10.100.100.204
-Interface Data       (eth1) : 10.101.101.204
-Interface External   (eth2) : no ip address
-
-zu-ovn-compute2
-Interface Management (eth0) : 10.100.100.205
-Interface Data       (eth1) : 10.101.101.205
-Interface External   (eth2) : no ip address
-
-zu-ovn-bootstrap
-Interface Management (eth0) : 10.100.100.210
-```
 ### Installation
-- Setup hosts mapping
+- install vagrant plugin
 ```
-nano /etc/hosts
+vagrant plugin install vagrant-disksize
+```
 
-10.100.100.200 zu-ovn-controller0
-10.100.100.203 zu-ovn-compute0
-10.100.100.204 zu-ovn-compute1
-10.100.100.205 zu-ovn-compute2
+- start vagrant
 ```
-- Setup and copy key from bootstrap node to all nodes
+vagrant up
 ```
-yum install sshpass
-ssh-keygen
 
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-controller0
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-compute0
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-compute1
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-compute2
+- provisioning openstack
 ```
-- Install ansible in bootstrap node
+vagrant provision --provision-with deploy
 ```
-yum -y update
-yum -y install epel-release
-yum -y install nano git python python-pip
 
-pip install ansible==2.5.5
+- Add compute to spesific zone if necessary
 ```
--  Disable ansible host key checking
-```
-nano ~/.ansible.cfg
+openstack aggregate create compute0
+openstack aggregate create compute1
+openstack aggregate create compute2
 
-[defaults]
-host_key_checking = False
-```
-- Clone Repository
-```
-git clone https://github.com/zufardhiyaulhaq/openstack-ovn-ansible.git
-```
-- Edit value
-```
-group_vars/all.yml
-hosts/hosts
-```
-- Run Ansible
-```
-ansible-playbook main.yml -i hosts/hosts
+openstack aggregate set --zone compute0 compute0
+openstack aggregate set --zone compute1 compute1
+openstack aggregate set --zone compute2 compute2
+
+openstack aggregate add host compute0 zu-ovn-compute-0
+openstack aggregate add host compute1 zu-ovn-compute-1
+openstack aggregate add host compute2 zu-ovn-compute-2
 ```

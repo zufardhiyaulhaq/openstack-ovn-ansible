@@ -3,6 +3,7 @@
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
+  config.disksize.size = '100GB'
 
   (0..0).each do |i|
     config.vm.define "zu-ovn-controller-#{i}" do |controller|
