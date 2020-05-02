@@ -50,15 +50,15 @@ flavor:
   vcpus: 1
 - name: m1.medium
   ram: 2048
-  disk: 20
+  disk: 10
   vcpus: 2
 - name: m1.large
   ram: 4096
-  disk: 20
+  disk: 10
   vcpus: 2
 - name: m1.xlarge
   ram: 4096
-  disk: 40
+  disk: 10
   vcpus: 4
 
 private_network:
