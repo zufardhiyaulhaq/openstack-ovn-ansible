@@ -6,5 +6,5 @@ terraform init
 
 - apply with spesific tfvars
 ```
-terraform apply -var-file="snsc.tfvars"
+terraform apply -var-file="variables/snsc.tfvars"
 ```

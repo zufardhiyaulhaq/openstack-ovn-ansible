@@ -5,6 +5,7 @@ resource "openstack_compute_instance_v2" "vm0" {
   key_pair = var.vm_keypair
   security_groups = var.vm_securitygroup
   availability_zone = var.vm0_zone
+  user_data = file("${path.module}/templates/userdata.yml")
 
   network {
     name = var.vm0_network
@@ -27,6 +28,7 @@ resource "openstack_compute_instance_v2" "vm1" {
   key_pair = var.vm_keypair
   security_groups = var.vm_securitygroup
   availability_zone = var.vm1_zone
+  user_data = file("${path.module}/templates/userdata.yml")
 
   network {
     name = var.vm1_network

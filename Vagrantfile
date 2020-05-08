@@ -46,7 +46,7 @@ Vagrant.configure('2') do |config|
       'controllers' => %w[zu-ovn-controller-0],
       'computes' => %w[zu-ovn-compute-0 zu-ovn-compute-1 zu-ovn-compute-2]
     }
-    ansible.playbook = 'provisioning/main.yml'
+    ansible.playbook = 'ansible/openstack-install/main.yml'
     ansible.extra_vars = { ansible_python_interpreter: '/usr/bin/python' }
   end
 end

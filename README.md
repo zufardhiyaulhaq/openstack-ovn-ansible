@@ -30,6 +30,9 @@ vagrant provision --provision-with deploy
 
 - Add compute to spesific zone if necessary
 ```
+source /root/admin_rc
+nova-manage cell_v2 discover_hosts --verbose
+
 openstack aggregate create compute0
 openstack aggregate create compute1
 openstack aggregate create compute2
