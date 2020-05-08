@@ -44,18 +44,18 @@ resource "openstack_compute_floatingip_associate_v2" "floatip_associate_1" {
   instance_id = "${openstack_compute_instance_v2.vm1.id}"
 }
 
-output "vm0 private ip" {
+output "vm0_private_ip" {
   value = openstack_compute_instance_v2.vm0.access_ip_v4
 }
 
-output "vm0 public ip" {
+output "vm0_public_ip" {
   value = openstack_networking_floatingip_v2.floatip_0.address
 }
 
-output "vm1 private ip" {
+output "vm1_private_ip" {
   value = openstack_compute_instance_v2.vm1.access_ip_v4
 }
 
-output "vm1 public ip" {
+output "vm1_public_ip" {
   value = openstack_networking_floatingip_v2.floatip_1.address
 }
