@@ -1,0 +1,5 @@
+- name: copy result
+  fetch:
+    src: /root/{{ os_type }}-{{ vm_type }}-output.json
+    dest: /root/{{ os_type }}-{{ vm_type }}-output.json
+    flat: yes
