@@ -59,8 +59,10 @@ variable "vm1_network" {
     type = string
 }
 
+variable "os_type" {
+  type = string
+}
 
-
-
-
-
+variable "vm_type" {
+  type = string
+}

@@ -1,0 +1,4 @@
+server_local_ip: 10.10.10.1
+client_local_ip: 10.10.10.2
+os_type: ovn
+vm_type: snsc
