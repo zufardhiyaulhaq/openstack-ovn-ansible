@@ -74,8 +74,8 @@ resource "null_resource" "delay" {
   }
 
   depends_on = [
-    openstack_compute_floatingip_associate_v2.floatip_0,
-    openstack_compute_floatingip_associate_v2.floatip_1,
+    openstack_compute_floatingip_associate_v2.floatip_associate_0,
+    openstack_compute_floatingip_associate_v2.floatip_associate_1,
   ]
 }
 
