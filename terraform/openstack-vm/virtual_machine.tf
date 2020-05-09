@@ -117,7 +117,7 @@ resource "local_file" "hosts_file" {
   ]
 }
 
-resource "null_resource" "exec-ansible" {
+resource "null_resource" "exec_ansible" {
   provisioner "local-exec" {
     command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars "@../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml" ../../ansible/iperf-benchmark/main.yml"
   }
