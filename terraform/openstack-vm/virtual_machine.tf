@@ -116,3 +116,14 @@ resource "local_file" "hosts_file" {
     null_resource.delay,
   ]
 }
+
+resource "null_resource" "exec ansible" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars "@../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml" ../../ansible/iperf-benchmark/main.yml"
+  }
+
+  depends_on = [
+    local_file.group_vars_file,
+    local_file.hosts_file,
+  ]
+}
