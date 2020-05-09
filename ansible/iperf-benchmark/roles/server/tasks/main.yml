@@ -1,2 +1,2 @@
 - name: Run iperf3 server
-  shell: iperf3 -s &
+  shell: iperf3 --server --one-off --daemon
