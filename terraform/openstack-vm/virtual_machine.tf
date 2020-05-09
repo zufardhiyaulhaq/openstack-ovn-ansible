@@ -70,12 +70,12 @@ output "vm_type" {
 
 resource "null_resource" "delay" {
   provisioner "local-exec" {
-    command = "sleep 30"
+    command = "sleep 60"
   }
 
   depends_on = [
-    openstack_compute_instance_v2.vm0,
-    openstack_compute_instance_v2.vm1,
+    openstack_compute_floatingip_associate_v2.floatip_0,
+    openstack_compute_floatingip_associate_v2.floatip_1,
   ]
 }
 
@@ -87,12 +87,13 @@ data "template_file" "group_vars" {
     client_local_ip = openstack_compute_instance_v2.vm1.access_ip_v4
     os_type         = var.os_type
     vm_type         = var.vm_type
+    vm_user         = var.vm_user
   }
 }
 
 resource "local_file" "group_vars_file" {
   content  = "${data.template_file.group_vars.rendered}"
-  filename = "./${var.os_type}_${var.vm_type}_ansible_vars.yml"
+  filename = "../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml"
 
   depends_on = [
     null_resource.delay,
@@ -109,7 +110,7 @@ data "template_file" "hosts" {
 
 resource "local_file" "hosts_file" {
   content  = "${data.template_file.hosts.rendered}"
-  filename = "./${var.os_type}_${var.vm_type}_hosts"
+  filename = "../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_hosts"
 
   depends_on = [
     null_resource.delay,

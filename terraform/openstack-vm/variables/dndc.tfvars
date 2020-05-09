@@ -26,3 +26,4 @@ vm1_zone = "compute1"
 # openstack type & kind
 os_type = "ovn"
 vm_type = "dndc"
+vm_user = "ubuntu"

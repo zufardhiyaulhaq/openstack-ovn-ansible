@@ -66,3 +66,7 @@ variable "os_type" {
 variable "vm_type" {
   type = string
 }
+
+variable "vm_user" {
+  type = string
+}
