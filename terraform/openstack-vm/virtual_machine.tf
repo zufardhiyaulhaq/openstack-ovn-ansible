@@ -87,7 +87,6 @@ data "template_file" "group_vars" {
     client_local_ip = openstack_compute_instance_v2.vm1.access_ip_v4
     os_type         = var.os_type
     vm_type         = var.vm_type
-    vm_user         = var.vm_user
   }
 }
 
@@ -105,6 +104,7 @@ data "template_file" "hosts" {
   vars = {
     server_floating_ip = openstack_networking_floatingip_v2.floatip_0.address
     client_floating_ip = openstack_networking_floatingip_v2.floatip_1.address
+    vm_user            = var.vm_user
   }
 }
 
