@@ -7,56 +7,56 @@ variable "os_tenant" {
 }
 
 variable "os_password" {
-    type = string
+  type = string
 }
 
 variable "os_auth" {
-    type = string
+  type = string
 }
 
 variable "os_region" {
-    type = string
+  type = string
 }
 
 variable "os_domain" {
-    type = string
+  type = string
 }
 
 variable "vm_securitygroup" {
-    type = list(string)
+  type = list(string)
 }
 
 variable "vm_keypair" {
-    type = string
+  type = string
 }
 
 variable "vm_flavor" {
-    type = string
+  type = string
 }
 
 variable "vm_image" {
-    type = string
+  type = string
 }
 
 variable "floatip_pool" {
-    type = string
-  
+  type = string
+
 }
 
 variable "vm0_zone" {
-    type = string
+  type = string
 }
 
 variable "vm0_network" {
-    type = string
+  type = string
 }
 
 variable "vm1_zone" {
-    type = string
+  type = string
 }
 
 variable "vm1_network" {
-    type = string
+  type = string
 }
 
 variable "os_type" {

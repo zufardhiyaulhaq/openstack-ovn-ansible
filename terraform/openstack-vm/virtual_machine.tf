@@ -1,11 +1,11 @@
 resource "openstack_compute_instance_v2" "vm0" {
-  name = "vm0"
-  image_name = var.vm_image
-  flavor_name = var.vm_flavor
-  key_pair = var.vm_keypair
-  security_groups = var.vm_securitygroup
+  name              = "vm0"
+  image_name        = var.vm_image
+  flavor_name       = var.vm_flavor
+  key_pair          = var.vm_keypair
+  security_groups   = var.vm_securitygroup
   availability_zone = var.vm0_zone
-  user_data = file("${path.module}/templates/userdata.yml")
+  user_data         = file("${path.module}/templates/userdata.yml")
 
   network {
     name = var.vm0_network
@@ -22,13 +22,13 @@ resource "openstack_compute_floatingip_associate_v2" "floatip_associate_0" {
 }
 
 resource "openstack_compute_instance_v2" "vm1" {
-  name = "vm1"
-  image_name = var.vm_image
-  flavor_name = var.vm_flavor
-  key_pair = var.vm_keypair
-  security_groups = var.vm_securitygroup
+  name              = "vm1"
+  image_name        = var.vm_image
+  flavor_name       = var.vm_flavor
+  key_pair          = var.vm_keypair
+  security_groups   = var.vm_securitygroup
   availability_zone = var.vm1_zone
-  user_data = file("${path.module}/templates/userdata.yml")
+  user_data         = file("${path.module}/templates/userdata.yml")
 
   network {
     name = var.vm1_network
@@ -80,14 +80,14 @@ resource "null_resource" "delay" {
 }
 
 
-data  "template_file" "group_vars" {
-    template = "${file("./templates/group_vars.yml.tpl")}"
-    vars {
-        server_local_ip = openstack_compute_instance_v2.vm0.access_ip_v4
-        client_local_ip = openstack_compute_instance_v2.vm1.access_ip_v4
-        os_type = var.os_type
-        vm_type = var.vm_type
-    }
+data "template_file" "group_vars" {
+  template = "${file("./templates/group_vars.yml.tpl")}"
+  vars = {
+    server_local_ip = openstack_compute_instance_v2.vm0.access_ip_v4
+    client_local_ip = openstack_compute_instance_v2.vm1.access_ip_v4
+    os_type         = var.os_type
+    vm_type         = var.vm_type
+  }
 }
 
 resource "local_file" "group_vars_file" {
@@ -99,12 +99,12 @@ resource "local_file" "group_vars_file" {
   ]
 }
 
-data  "template_file" "hosts" {
-    template = "${file("./templates/hosts.tpl")}"
-    vars {
-        server_floating_ip = openstack_networking_floatingip_v2.floatip_0.address
-        client_floating_ip = openstack_networking_floatingip_v2.floatip_1.address
-    }
+data "template_file" "hosts" {
+  template = "${file("./templates/hosts.tpl")}"
+  vars = {
+    server_floating_ip = openstack_networking_floatingip_v2.floatip_0.address
+    client_floating_ip = openstack_networking_floatingip_v2.floatip_1.address
+  }
 }
 
 resource "local_file" "hosts_file" {
