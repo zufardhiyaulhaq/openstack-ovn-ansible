@@ -1,0 +1,5 @@
+- name: copy result
+  fetch:
+    src: /root/packetloss_{{ os_type }}-{{ vm_type }}-output.json
+    dest: /root/packetloss_{{ os_type }}-{{ vm_type }}-output.json
+    flat: yes

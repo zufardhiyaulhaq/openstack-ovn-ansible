@@ -1,0 +1,2 @@
+- name: Run iperf3 client
+  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-output.json

@@ -90,9 +90,18 @@ data "template_file" "group_vars" {
   }
 }
 
-resource "local_file" "group_vars_file" {
+resource "local_file" "group_vars_file_throughput" {
   content  = "${data.template_file.group_vars.rendered}"
-  filename = "../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml"
+  filename = "../../ansible/throughput-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml"
+
+  depends_on = [
+    null_resource.delay,
+  ]
+}
+
+resource "local_file" "group_vars_file_packetloss" {
+  content  = "${data.template_file.group_vars.rendered}"
+  filename = "../../ansible/packetloss-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml"
 
   depends_on = [
     null_resource.delay,
@@ -108,22 +117,43 @@ data "template_file" "hosts" {
   }
 }
 
-resource "local_file" "hosts_file" {
+resource "local_file" "hosts_file_throughput" {
   content  = "${data.template_file.hosts.rendered}"
-  filename = "../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_hosts"
+  filename = "../../ansible/throughput-benchmark/${var.os_type}_${var.vm_type}_hosts"
 
   depends_on = [
     null_resource.delay,
   ]
 }
 
-resource "null_resource" "exec_ansible" {
+resource "local_file" "hosts_file_packetloss" {
+  content  = "${data.template_file.hosts.rendered}"
+  filename = "../../ansible/packetloss-benchmark/${var.os_type}_${var.vm_type}_hosts"
+
+  depends_on = [
+    null_resource.delay,
+  ]
+}
+
+resource "null_resource" "exec_ansible_throughput" {
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars \"@../../ansible/iperf-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml\" ../../ansible/iperf-benchmark/main.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/throughput-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars \"@../../ansible/throughput-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml\" ../../ansible/throughput-benchmark/main.yml"
   }
 
   depends_on = [
-    local_file.group_vars_file,
-    local_file.hosts_file,
+    local_file.group_vars_file_throughput,
+    local_file.hosts_file_throughput,
+  ]
+}
+
+resource "null_resource" "exec_ansible_packetloss" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/packetloss-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars \"@../../ansible/packetloss-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml\" ../../ansible/packetloss-benchmark/main.yml"
+  }
+
+  depends_on = [
+    local_file.group_vars_file_throughput,
+    local_file.hosts_file_throughput,
+    null_resource.exec_ansible_throughput,
   ]
 }
