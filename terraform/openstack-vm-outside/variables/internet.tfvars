@@ -20,7 +20,7 @@ vm0_network = "internal-0"
 vm0_zone = "compute0"
 
 #outside client
-outside_vm_ip = "10.101.102.250"
+outside_vm_ip = "10.201.102.250"
 outside_vm_user = "vagrant"
 
 # openstack type & kind
