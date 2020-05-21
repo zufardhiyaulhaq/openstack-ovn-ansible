@@ -10,7 +10,7 @@ os_domain = "default"
 vm_securitygroup = ["sg-standard"]
 vm_keypair = "ansible-ssh"
 vm_flavor = "m1.large"
-vm_image = "ubuntu-xenial"
+vm_image = "ubuntu-bionic"
 
 # openstack networking
 floatip_pool = "external"
