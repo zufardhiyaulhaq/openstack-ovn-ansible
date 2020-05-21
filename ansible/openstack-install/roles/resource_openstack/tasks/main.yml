@@ -4,6 +4,11 @@
     url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
     dest: /root/xenial-server-cloudimg-amd64-disk1.img
 
+- name: Download Ubuntu Bionic
+  get_url:
+    url: https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+    dest: /root/bionic-server-cloudimg-amd64.img
+
 - name: Download Cirros
   get_url:
     url: http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
@@ -17,6 +22,16 @@
     disk_format: qcow2
     state: present
     filename: /root/xenial-server-cloudimg-amd64-disk1.img
+    is_public: yes
+
+- name: create Ubuntu bionic image
+  os_image:
+    cloud: openstack
+    name: ubuntu-bionic
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /root/bionic-server-cloudimg-amd64.img
     is_public: yes
 
 - name: create Cirros Image
