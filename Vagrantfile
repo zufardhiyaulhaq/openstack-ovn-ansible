@@ -42,10 +42,7 @@ Vagrant.configure('2') do |config|
 
   $script = <<-'SCRIPT'
   sudo apt update -y
-  sudo apt install libsctp1 python3 python3-pip python-virtualenv -y
-  wget https://iperf.fr/download/ubuntu/libiperf0_3.7-3_amd64.deb
-  wget https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
-  sudo dpkg -i libiperf0_3.7-3_amd64.deb iperf3_3.7-3_amd64.deb
+  sudo apt install python3 python3-pip python-virtualenv -y
   SCRIPT
 
   config.vm.define 'zu-ovn-internet' do |internet|
