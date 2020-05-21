@@ -2,7 +2,7 @@
 os_username = "admin"
 os_tenant = "admin"
 os_password = "ADMIN_PASS"
-os_auth = "http://10.100.100.200:5000/v3"
+os_auth = "http://10.200.100.200:5000/v3"
 os_region = "RegionOne"
 os_domain = "default"
 
