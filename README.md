@@ -30,6 +30,8 @@ vagrant provision --provision-with deploy
 
 - Add compute to spesific zone if necessary
 ```
+vagrant ssh zu-ovn-controller-0
+
 source /root/admin_rc
 nova-manage cell_v2 discover_hosts --verbose
 

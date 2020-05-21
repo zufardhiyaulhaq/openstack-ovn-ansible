@@ -40,6 +40,23 @@ Vagrant.configure('2') do |config|
     end
   end
 
+  $script = <<-'SCRIPT'
+  sudo apt update -y
+  sudo apt install iperf3 python3 python3-pip python-virtualenv -y
+  SCRIPT
+
+  config.vm.define 'zu-ovn-internet' do |internet|
+    internet.vm.box = 'hashicorp/bionic64'
+    internet.vm.hostname = 'zu-ovn-internet'
+    internet.vm.network 'private_network', ip: '10.201.102.250'
+    internet.vm.provision 'shell', inline: $script
+    internet.vm.provider 'virtualbox' do |vb|
+      vb.name = 'zu-ovn-internet'
+      vb.memory = 4096
+      vb.cpus = 2
+    end
+  end
+
   config.vm.provision 'deploy', type: 'ansible', run: 'never' do |ansible|
     ansible.version = '2.5.5'
     ansible.groups = {
