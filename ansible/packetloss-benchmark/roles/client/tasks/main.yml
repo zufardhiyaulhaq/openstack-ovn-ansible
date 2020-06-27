@@ -7,4 +7,4 @@
     deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
 
 - name: Run iperf3 client
-  shell: iperf3 --udp -c {{ server_local_ip }} -O 5 -b 1000m -t 480 -V -R -J > /root/packetloss_{{ os_type }}-{{ vm_type }}-output.json
+  shell: iperf3 --udp -c {{ server_local_ip }} -O 5 -b 100m -t 480 -V -R -J > /root/packetloss_{{ os_type }}-{{ vm_type }}-output.json
