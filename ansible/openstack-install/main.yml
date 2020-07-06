@@ -17,6 +17,7 @@
   roles:
   - keystone
   - glance
+  - placement
 
 - name: Install nova controller
   become: true

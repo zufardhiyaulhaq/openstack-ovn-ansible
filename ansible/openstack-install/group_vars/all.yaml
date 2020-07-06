@@ -27,6 +27,7 @@ glance_dbpw: GLANCE_DBPASS
 glance_pw: GLANCE_PASS
 nova_dbpw: NOVA_DBPASS
 nova_pw: NOVA_PASS
+placement_dbpw: LACEMENT_DBPASS
 placement_pw: PLACEMENT_PASS
 neutron_dbpw: NEUTRON_DBPASS
 neutron_pw: NEUTRON_PASS

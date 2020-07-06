@@ -50,23 +50,23 @@
 - name: create nova admin endpoint
   os_keystone_endpoint: cloud=openstack service=nova endpoint_interface=admin url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8774/v2.1 region=RegionOne state=present
 
-- name: create placement user
-  os_user: cloud=openstack state=present name=placement password={{ placement_pw }} update_password=on_create domain=default default_project=admin
+# - name: create placement user
+#   os_user: cloud=openstack state=present name=placement password={{ placement_pw }} update_password=on_create domain=default default_project=admin
 
-- name: grant admin role on the placement user
-  os_user_role: cloud=openstack user=placement role=admin project=service
+# - name: grant admin role on the placement user
+#   os_user_role: cloud=openstack user=placement role=admin project=service
 
-- name: create placement service
-  os_keystone_service: cloud=openstack state=present name=placement service_type=placement description="Placement API"
+# - name: create placement service
+#   os_keystone_service: cloud=openstack state=present name=placement service_type=placement description="Placement API"
 
-- name: create placement public endpoint
-  os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=public url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
+# - name: create placement public endpoint
+#   os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=public url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
 
-- name: create placement internal endpoint
-  os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=internal url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
+# - name: create placement internal endpoint
+#   os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=internal url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
 
-- name: create placement admin endpoint
-  os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=admin url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
+# - name: create placement admin endpoint
+#   os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=admin url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
 
 - name: install nova packages
   yum: name="{{ packages }}" state=latest
@@ -74,16 +74,14 @@
     packages:
     - openstack-nova-api
     - openstack-nova-conductor
-    - openstack-nova-console
     - openstack-nova-novncproxy
     - openstack-nova-scheduler
-    - openstack-nova-placement-api
 
 - name: create nova configuration file
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
 
-- name: create placement httpd configuration file
-  template: src=00-nova-placement-api.conf.j2 dest=/etc/httpd/conf.d/00-nova-placement-api.conf
+# - name: create placement httpd configuration file
+#   template: src=00-nova-placement-api.conf.j2 dest=/etc/httpd/conf.d/00-nova-placement-api.conf
 
 - name: restart httpd service
   service: name=httpd state=restarted enabled=yes
@@ -111,8 +109,8 @@
 - name: start nova-api service
   service: name=openstack-nova-api state=restarted enabled=yes
 
-- name: start nova-consoleauth service
-  service: name=openstack-nova-consoleauth state=restarted enabled=yes
+# - name: start nova-consoleauth service
+#   service: name=openstack-nova-consoleauth state=restarted enabled=yes
 
 - name: start nova-scheduler service
   service: name=openstack-nova-scheduler state=restarted enabled=yes

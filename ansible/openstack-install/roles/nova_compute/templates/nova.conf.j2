@@ -31,7 +31,8 @@ username = placement
 password = {{ placement_pw }}
 
 [keystone_authtoken]
-auth_url = http://{{ openstack.controller[0].ip_man }}:5000/v3
+www_authenticate_uri = http://{{ openstack.controller[0].ip_man }}:5000/
+auth_url = http://{{ openstack.controller[0].ip_man }}:5000/
 memcached_servers = {{ openstack.controller[0].ip_man }}:11211
 auth_type = password
 project_domain_name = Default

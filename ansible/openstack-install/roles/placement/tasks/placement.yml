@@ -1,0 +1,47 @@
+---
+- name: create placement database
+  mysql_db: name=placement state=present login_user=root login_password={{ root_dbpw }}
+
+- name: grant placement database local host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=placement password={{ placement_dbpw }} append_privs=true priv='placement.*:ALL'
+
+- name: grant placement database controller host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=placement password={{ placement_dbpw }} append_privs=true priv='placement.*:ALL' host={{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}
+
+- name: grant placement database any host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=placement password={{ placement_dbpw }} append_privs=true priv='placement.*:ALL' host=%
+
+- name: create placement user
+  os_user: cloud=openstack state=present name=placement password={{ placement_pw }} update_password=on_create domain=default default_project=admin
+
+- name: grant admin role on the placement user
+  os_user_role: cloud=openstack user=placement role=admin project=service
+
+- name: create placement service
+  os_keystone_service: cloud=openstack state=present name=placement service_type=placement description="Placement API"
+
+- name: create placement public endpoint
+  os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=public url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
+
+- name: create placement internal endpoint
+  os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=internal url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
+
+- name: create placement admin endpoint
+  os_keystone_endpoint: cloud=openstack service=placement endpoint_interface=admin url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8778 region=RegionOne state=present
+
+- name: install placement package
+  yum: name=openstack-placement-api state=latest
+
+- name: create placement-api configuration file
+  template: src=placement.conf.j2 dest=/etc/placement/placement.conf
+
+- name: populate placement database
+  shell: placement-manage db sync
+  become: yes
+  become_user: placement
+
+- name: start placement-api service
+  service: name=openstack-placement-api state=restarted enabled=yes
+
+- name: start placement-registry service
+  service: name=httpd state=restarted enabled=yes

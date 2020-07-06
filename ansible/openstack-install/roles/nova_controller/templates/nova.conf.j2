@@ -36,7 +36,8 @@ connection = mysql+pymysql://nova:{{ nova_dbpw }}@{{ hostvars[inventory_hostname
 auth_strategy = keystone
 
 [keystone_authtoken]
-auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000/v3
+www_authenticate_uri = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000/
+auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000/
 memcached_servers = {{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:11211
 auth_type = password
 project_domain_name = Default
