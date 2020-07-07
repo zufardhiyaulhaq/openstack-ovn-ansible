@@ -1,0 +1,6 @@
+- name: Post Deploy OpenStack
+  become: true
+  hosts: controllers
+  roles:
+  - after_openstack
+  - resource_openstack

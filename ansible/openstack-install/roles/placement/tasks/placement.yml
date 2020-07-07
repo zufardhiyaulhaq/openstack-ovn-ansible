@@ -40,5 +40,8 @@
   become: yes
   become_user: placement
 
+- name: create placement httpd configuration file
+  template: src=00-placement-api.conf.j2 dest=/etc/httpd/conf.d/00-placement-api.conf
+
 - name: start placement-registry service
   service: name=httpd state=restarted enabled=yes

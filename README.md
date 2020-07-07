@@ -26,6 +26,7 @@ vagrant up
 - provisioning openstack
 ```
 vagrant provision --provision-with deploy
+vagrant provision --provision-with post-deploy
 ```
 
 - Add compute to spesific zone if necessary

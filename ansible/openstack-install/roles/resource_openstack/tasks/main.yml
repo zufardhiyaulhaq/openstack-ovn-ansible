@@ -91,6 +91,3 @@
 
 - name: create key openstack ansible
   shell: source /root/admin_rc && openstack keypair create --public-key /root/ansible_rsa.pub ansible-ssh
-
-- name: discover_hosts
-  shell: source /root/admin_rc && nova-manage cell_v2 discover_hosts --verbose

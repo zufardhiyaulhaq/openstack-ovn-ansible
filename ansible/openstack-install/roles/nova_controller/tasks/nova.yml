@@ -80,9 +80,6 @@
 - name: create nova configuration file
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
 
-# - name: create placement httpd configuration file
-#   template: src=00-nova-placement-api.conf.j2 dest=/etc/httpd/conf.d/00-nova-placement-api.conf
-
 - name: restart httpd service
   service: name=httpd state=restarted enabled=yes
 

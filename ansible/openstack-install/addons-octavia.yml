@@ -1,0 +1,5 @@
+- name: Install Octavia addons
+  become: true
+  hosts: controllers
+  roles:
+  - octavia

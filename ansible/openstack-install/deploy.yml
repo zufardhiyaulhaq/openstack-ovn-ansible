@@ -16,8 +16,8 @@
   hosts: controllers
   roles:
   - keystone
-  - glance
   - placement
+  - glance
 
 - name: Install nova controller
   become: true
@@ -48,11 +48,4 @@
   hosts: controllers
   roles:
   - horizon
-
-- name: Discover host Nova
-  become: true
-  hosts: controllers
-  roles:
-  - after_openstack
-  - resource_openstack
 
