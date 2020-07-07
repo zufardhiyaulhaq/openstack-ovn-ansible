@@ -11,8 +11,8 @@ notify_nova_on_port_data_changes = true
 lock_path = /lock
 
 [keystone_authtoken]
-auth_uri = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
-auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:35357
+www_authenticate_uri = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
+auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
 memcached_servers = {{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:11211
 auth_type = password
 project_domain_name = Default
@@ -22,7 +22,7 @@ username = neutron
 password = {{ neutron_pw }}
 
 [nova]
-auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:35357
+auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
 auth_type = password
 project_domain_name = Default
 user_domain_name = Default

@@ -4,15 +4,9 @@
   yum: name="{{ packages }}" state=latest
   vars:
     packages:
-    - centos-release-openstack-ussuri
+    - centos-release-openstack-stein
     - epel-release
     - yum-plugin-priorities
-
-- name: powertools
-  shell: yum config-manager --set-enabled PowerTools
-  
-- name: update all packages
-  yum: name=* state=latest
 
 - name: install required packages
   yum: name="{{ packages }}" state=latest

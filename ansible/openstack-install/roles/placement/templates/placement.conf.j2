@@ -1,11 +1,10 @@
 [placement_database]
-connection = mysql+pymysql://placement:{{ placement }}@{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}/placement
+connection = mysql+pymysql://placement:{{ placement_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}/placement
 
 [api]
 auth_strategy = keystone
 
 [keystone_authtoken]
-auth_uri = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000/v3
 auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000/v3
 memcached_servers = {{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:11211
 auth_type = password

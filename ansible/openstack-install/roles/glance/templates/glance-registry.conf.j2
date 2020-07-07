@@ -4,7 +4,7 @@
 connection = mysql+pymysql://glance:{{ glance_dbpw }}@{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}/glance
 
 [keystone_authtoken]
-auth_uri = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
+www_authenticate_uri  = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
 auth_url = http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:5000
 memcached_servers = {{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:11211
 auth_type = password

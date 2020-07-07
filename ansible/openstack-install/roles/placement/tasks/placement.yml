@@ -40,8 +40,5 @@
   become: yes
   become_user: placement
 
-- name: start placement-api service
-  service: name=openstack-placement-api state=restarted enabled=yes
-
 - name: start placement-registry service
   service: name=httpd state=restarted enabled=yes
