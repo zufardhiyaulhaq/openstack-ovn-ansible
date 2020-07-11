@@ -1,4 +1,9 @@
 ### Terraform Example
+- copy ssh key
+```
+ssh-copy-id vagrant@10.201.102.250
+```
+
 - init terraform
 ```
 terraform init

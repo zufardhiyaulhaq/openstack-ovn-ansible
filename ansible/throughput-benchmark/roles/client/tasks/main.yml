@@ -7,4 +7,10 @@
     deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
 
 - name: Run iperf3 client
-  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 480 -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-output.json
+  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -b 100m -R -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-100m-output.json
+
+- name: Run iperf3 client
+  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -b 50m -R -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-50m-output.json
+
+- name: Run iperf3 client
+  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -b 200m -R -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-200m-output.json

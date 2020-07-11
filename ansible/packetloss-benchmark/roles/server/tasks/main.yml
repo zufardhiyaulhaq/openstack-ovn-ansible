@@ -12,4 +12,4 @@
     deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
 
 - name: Run iperf3 server
-  shell: iperf3 --server --one-off --daemon
+  shell: iperf3 --server --daemon
