@@ -117,6 +117,3 @@
 
 - name: start nova-novncproxy service
   service: name=openstack-nova-novncproxy state=restarted enabled=yes
-
-
-

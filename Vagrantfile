@@ -76,14 +76,4 @@ Vagrant.configure('2') do |config|
     ansible.playbook = 'ansible/openstack-install/post-deploy.yml'
     ansible.extra_vars = { ansible_python_interpreter: '/usr/bin/python' }
   end
-
-  config.vm.provision 'addons-octavia', type: 'ansible', run: 'never' do |ansible|
-    ansible.version = '2.5.5'
-    ansible.groups = {
-      'controllers' => %w[zu-ovn-controller-0],
-      'computes' => %w[zu-ovn-compute-0 zu-ovn-compute-1 zu-ovn-compute-2]
-    }
-    ansible.playbook = 'ansible/openstack-install/addons-octavia.yml'
-    ansible.extra_vars = { ansible_python_interpreter: '/usr/bin/python' }
-  end
 end

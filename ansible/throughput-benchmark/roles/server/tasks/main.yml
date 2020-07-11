@@ -1,13 +1,19 @@
-- name: Install .deb package from the internet.
+- name: Install libsctp1 package from the internet.
   apt:
     pkg:
     - libsctp1
 
-- name: Install .deb package from the internet.
+- name: copy sockperf
+  copy:
+    src: sockperf
+    dest: /usr/local/bin/sockperf
+    mode: u+x
+    
+- name: Install libiperf package from the internet.
   apt:
     deb: https://iperf.fr/download/ubuntu/libiperf0_3.7-3_amd64.deb
 
-- name: Install .deb package from the internet.
+- name: Install iperf3_3.7 package from the internet.
   apt:
     deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
 

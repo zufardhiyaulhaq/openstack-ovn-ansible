@@ -8,6 +8,9 @@
     - epel-release
     - yum-plugin-priorities
 
+- name: update all packages
+  yum: name=* state=latest
+
 - name: install required packages
   yum: name="{{ packages }}" state=latest
   vars:
