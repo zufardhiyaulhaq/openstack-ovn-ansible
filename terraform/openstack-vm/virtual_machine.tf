@@ -108,6 +108,15 @@ resource "local_file" "group_vars_file_packetloss" {
   ]
 }
 
+resource "local_file" "group_vars_file_latency" {
+  content  = "${data.template_file.group_vars.rendered}"
+  filename = "../../ansible/latency-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml"
+
+  depends_on = [
+    null_resource.delay,
+  ]
+}
+
 data "template_file" "hosts" {
   template = "${file("./templates/hosts.tpl")}"
   vars = {
@@ -135,6 +144,15 @@ resource "local_file" "hosts_file_packetloss" {
   ]
 }
 
+resource "local_file" "hosts_file_latency" {
+  content  = "${data.template_file.hosts.rendered}"
+  filename = "../../ansible/latency-benchmark/${var.os_type}_${var.vm_type}_hosts"
+
+  depends_on = [
+    null_resource.delay,
+  ]
+}
+
 resource "null_resource" "exec_ansible_throughput" {
   provisioner "local-exec" {
     command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/throughput-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars \"@../../ansible/throughput-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml\" ../../ansible/throughput-benchmark/main.yml"
@@ -155,5 +173,17 @@ resource "null_resource" "exec_ansible_packetloss" {
     local_file.group_vars_file_packetloss,
     local_file.hosts_file_packetloss,
     null_resource.exec_ansible_throughput,
+  ]
+}
+
+resource "null_resource" "exec_ansible_latency" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ../../ansible/latency-benchmark/${var.os_type}_${var.vm_type}_hosts --extra-vars \"@../../ansible/latency-benchmark/${var.os_type}_${var.vm_type}_ansible_vars.yml\" ../../ansible/latency-benchmark/main.yml"
+  }
+
+  depends_on = [
+    local_file.group_vars_file_latency,
+    local_file.hosts_file_latency,
+    null_resource.exec_ansible_packetloss,
   ]
 }

@@ -1,0 +1,19 @@
+- name: Setup server
+  hosts: server
+  become: true
+  roles:
+  - server
+  
+- name: Setup & execute client
+  hosts: client
+  become: true
+  roles:
+  - client
+
+- name: Copy result from client
+  hosts: client
+  become: true
+  roles:
+  - result
+
+

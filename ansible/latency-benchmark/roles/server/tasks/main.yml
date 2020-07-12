@@ -1,0 +1,19 @@
+- name: Install .deb package from the internet.
+  apt:
+    deb: https://iperf.fr/download/ubuntu/libiperf0_3.7-3_amd64.deb
+
+- name: Install .deb package from the internet.
+  apt:
+    deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
+
+- name: copy sockperf
+  copy:
+    src: sockperf
+    dest: /usr/local/bin/sockperf
+    mode: u+x
+
+- name: Run iperf3 server
+  shell: iperf3 --server --daemon
+
+- name: Run sockperf server
+  shell: sockperf server -p 11111 --daemonize

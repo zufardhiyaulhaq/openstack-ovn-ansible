@@ -1,22 +1,13 @@
-- name: Install libiperf package from the internet.
+- name: Install .deb package from the internet.
   apt:
     deb: https://iperf.fr/download/ubuntu/libiperf0_3.7-3_amd64.deb
 
-- name: Install iperf3_3.7 package from the internet.
+- name: Install .deb package from the internet.
   apt:
     deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
 
-- name: copy sockperf
-  copy:
-    src: sockperf
-    dest: /usr/local/bin/sockperf
-    mode: u+x
+- name: Run iperf3 client
+  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -R -J -V > /root/throughput_{{ os_type }}-{{ vm_type }}-output.json
 
 - name: Run iperf3 client
-  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -b 100m -R -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-100m-output.json
-
-- name: Run iperf3 client
-  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -b 50m -R -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-50m-output.json
-
-- name: Run iperf3 client
-  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -b 200m -R -V -J > /root/throughput_{{ os_type }}-{{ vm_type }}-200m-output.json
+  shell: iperf3 --udp -b 100000m -c {{ server_local_ip }} -O 5 -t 120 -R -J -V > /root/throughput_udp_{{ os_type }}-{{ vm_type }}-output.json
