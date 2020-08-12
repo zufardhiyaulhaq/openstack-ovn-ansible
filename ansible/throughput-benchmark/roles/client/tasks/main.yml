@@ -6,8 +6,12 @@
   apt:
     deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
 
-- name: Run iperf3 client
-  shell: iperf3 -c {{ server_local_ip }} -O 5 -t 120 -R -J -V > /root/throughput_{{ os_type }}-{{ vm_type }}-output.json
 
-- name: Run iperf3 client
-  shell: iperf3 --udp -b 100000m -c {{ server_local_ip }} -O 5 -t 120 -R -J -V > /root/throughput_udp_{{ os_type }}-{{ vm_type }}-output.json
+- name: Run iperf3 tcp with bandwidh 100 mbit/s client
+  shell: iperf3 -b 100m -c {{ server_local_ip }} -l 1402 -O 5 -t 360 -R -J -V > /root/throughput_100m_{{ os_type }}-{{ vm_type }}-output.json
+
+- name: Run iperf3 tcp with bandwidh 200 mbit/s client
+  shell: iperf3 -b 200m -c {{ server_local_ip }} -l 1402 -O 5 -t 360 -R -J -V > /root/throughput_200m_{{ os_type }}-{{ vm_type }}-output.json
+
+- name: Run iperf3 tcp with bandwidh 300 mbit/s client
+  shell: iperf3 -b 300m -c {{ server_local_ip }} -l 1402 -O 5 -t 360 -R -J -V > /root/throughput_300m_{{ os_type }}-{{ vm_type }}-output.json

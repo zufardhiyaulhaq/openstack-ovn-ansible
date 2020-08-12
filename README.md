@@ -2,28 +2,22 @@
 This ansible script will provisioning OpenStack with OVN (Open Virtual Network) Enabled.
 
 ### Tested
-- OpenStack Queens
+- OpenStack Stein
 - 1 controller 3 compute
-- OpenvSwitch 1.11.0
 
 ### Requirement
 - virtualbox
 - vagrant
 - ansible 2.5.5
-- terraform (optional)
+- terraform
 
 ### Installation
-- install vagrant plugin
-```
-vagrant plugin install vagrant-disksize
-```
-
 - start vagrant
 ```
 vagrant up
 ```
 
-- provisioning openstack
+- provisioning & install openstack
 ```
 vagrant provision --provision-with deploy
 vagrant provision --provision-with post-deploy

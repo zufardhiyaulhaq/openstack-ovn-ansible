@@ -1,0 +1,7 @@
+- name: Copy result from client
+  hosts: client
+  become: true
+  roles:
+  - result
+
+

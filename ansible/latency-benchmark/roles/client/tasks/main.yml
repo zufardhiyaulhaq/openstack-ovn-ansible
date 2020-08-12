@@ -17,7 +17,7 @@
     seconds: "5"
 
 - name: Run iperf3 client 100m
-  shell: iperf3 --udp -c {{ server_local_ip }} -O 5 -b 100m -t 120 -R
+  shell: iperf3 --udp -c {{ server_local_ip }} -l 1402 -O 5 -b 100m -t 120 -R
   async: 1000
   poll: 0
 
@@ -27,7 +27,7 @@
 
 - name: Run sockperf client 100m
   shell: >
-    sockperf ping-pong -i {{ server_local_ip }} --msg-size 16 -p 11111 -t 30 | awk -F ' ' '/Summary:/{print $5}' | xargs -I{} echo '{"latency": {}}' > /root/latency_{{ os_type }}-{{ vm_type }}-100m-output.json
+    sockperf ping-pong --tcp -i {{ server_local_ip }} --msg-size 16 -p 11111 -t 30 | awk -F ' ' '/Summary:/{print $5}' | xargs -I{} echo '{"latency": {}}' > /root/latency_{{ os_type }}-{{ vm_type }}-100m-output.json
 
 - name: kill iperf3 client 100m
   shell: killall iperf3
@@ -37,7 +37,7 @@
     seconds: "5"
 
 - name: Run iperf3 client 200m
-  shell: iperf3 --udp -c {{ server_local_ip }} -O 5 -b 200m -t 120 -R
+  shell: iperf3 --udp -c {{ server_local_ip }} -l 1402 -O 5 -b 200m -t 120 -R
   async: 1000
   poll: 0
 
@@ -47,7 +47,7 @@
 
 - name: Run sockperf client 200m
   shell: >
-    sockperf ping-pong -i {{ server_local_ip }} --msg-size 16 -p 11111 -t 30 | awk -F ' ' '/Summary:/{print $5}' | xargs -I{} echo '{"latency": {}}' > /root/latency_{{ os_type }}-{{ vm_type }}-200m-output.json
+    sockperf ping-pong --tcp -i {{ server_local_ip }} --msg-size 16 -p 11111 -t 30 | awk -F ' ' '/Summary:/{print $5}' | xargs -I{} echo '{"latency": {}}' > /root/latency_{{ os_type }}-{{ vm_type }}-200m-output.json
 
 - name: kill iperf3 client 200m
   shell: killall iperf3
@@ -57,7 +57,7 @@
     seconds: "5"
 
 - name: Run iperf3 client 300m
-  shell: iperf3 --udp -c {{ server_local_ip }} -O 5 -b 300m -t 120 -R
+  shell: iperf3 --udp -c {{ server_local_ip }} -l 1402 -O 5 -b 300m -t 120 -R
   async: 1000
   poll: 0
 
@@ -67,7 +67,7 @@
 
 - name: Run sockperf client 300m
   shell: >
-    sockperf ping-pong -i {{ server_local_ip }} --msg-size 16 -p 11111 -t 30 | awk -F ' ' '/Summary:/{print $5}' | xargs -I{} echo '{"latency": {}}' > /root/latency_{{ os_type }}-{{ vm_type }}-300m-output.json
+    sockperf ping-pong --tcp -i {{ server_local_ip }} --msg-size 16 -p 11111 -t 30 | awk -F ' ' '/Summary:/{print $5}' | xargs -I{} echo '{"latency": {}}' > /root/latency_{{ os_type }}-{{ vm_type }}-300m-output.json
 
 - name: kill iperf3 client 300m
   shell: killall iperf3

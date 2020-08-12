@@ -1,16 +1,16 @@
-- name: copy result
+- name: copy result packetloss 100m
   fetch:
     src: /root/packetloss_{{ os_type }}-{{ vm_type }}-100m-output.json
     dest: /root/packetloss_{{ os_type }}-{{ vm_type }}-100m-output.json
     flat: yes
 
-- name: copy result
+- name: copy result packetloss 200m
   fetch:
     src: /root/packetloss_{{ os_type }}-{{ vm_type }}-200m-output.json
     dest: /root/packetloss_{{ os_type }}-{{ vm_type }}-200m-output.json
     flat: yes
 
-- name: copy result
+- name: copy result packetloss 300m
   fetch:
     src: /root/packetloss_{{ os_type }}-{{ vm_type }}-300m-output.json
     dest: /root/packetloss_{{ os_type }}-{{ vm_type }}-300m-output.json

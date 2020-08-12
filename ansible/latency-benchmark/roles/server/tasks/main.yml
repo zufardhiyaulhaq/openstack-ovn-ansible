@@ -16,4 +16,8 @@
   shell: iperf3 --server --daemon
 
 - name: Run sockperf server
-  shell: sockperf server -p 11111 --daemonize
+  shell: sockperf server -p 11111 --daemonize --tcp
+
+- name: pause 5 second
+  pause:
+    seconds: "5"

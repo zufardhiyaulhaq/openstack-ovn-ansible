@@ -70,7 +70,7 @@ output "vm_type" {
 
 resource "null_resource" "delay" {
   provisioner "local-exec" {
-    command = "sleep 400"
+    command = "sleep 600"
   }
 
   depends_on = [

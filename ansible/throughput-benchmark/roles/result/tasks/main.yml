@@ -1,11 +1,17 @@
 - name: copy result
   fetch:
-    src: /root/throughput_{{ os_type }}-{{ vm_type }}-output.json
-    dest: /root/throughput_{{ os_type }}-{{ vm_type }}-output.json
+    src: /root/throughput_100m_{{ os_type }}-{{ vm_type }}-output.json
+    dest: /root/throughput_100m_{{ os_type }}-{{ vm_type }}-output.json
     flat: yes
 
 - name: copy result
   fetch:
-    src: /root/throughput_udp_{{ os_type }}-{{ vm_type }}-output.json
-    dest: /root/throughput_udp_{{ os_type }}-{{ vm_type }}-output.json
+    src: /root/throughput_200m_{{ os_type }}-{{ vm_type }}-output.json
+    dest: /root/throughput_200m_{{ os_type }}-{{ vm_type }}-output.json
+    flat: yes
+
+- name: copy result
+  fetch:
+    src: /root/throughput_300m_{{ os_type }}-{{ vm_type }}-output.json
+    dest: /root/throughput_300m_{{ os_type }}-{{ vm_type }}-output.json
     flat: yes
