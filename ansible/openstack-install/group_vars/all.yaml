@@ -1,0 +1,80 @@
+openstack_controller: 1
+openstack_compute: 3
+
+openstack:
+  controller:
+    - hostname: zu-ovn-controller0
+      ip_man: 10.200.100.200
+  compute:
+    - hostname: zu-ovn-compute0
+      ip_man: 10.200.100.210
+      ip_data: 10.201.101.210
+    - hostname: zu-ovn-compute1
+      ip_man: 10.200.100.211
+      ip_data: 10.201.101.211
+    - hostname: zu-ovn-compute2
+      ip_man: 10.200.100.212
+      ip_data: 10.201.101.212
+
+gateway_ip: 10.100.100.1
+dns_ip: 8.8.8.8
+
+root_dbpw: DBROOT_PASS
+rabbitmq_pw: RABBIT_PASS
+keystone_dbpw: KEYSTONE_DBPASS
+admin_pw: ADMIN_PASS
+glance_dbpw: GLANCE_DBPASS
+glance_pw: GLANCE_PASS
+nova_dbpw: NOVA_DBPASS
+nova_pw: NOVA_PASS
+placement_dbpw: PLACEMENT_DBPASS
+placement_pw: PLACEMENT_PASS
+neutron_dbpw: NEUTRON_DBPASS
+neutron_pw: NEUTRON_PASS
+metadata_secret: METADATA_SECRET
+
+external_network:
+  name: external
+  subnet_name: external-subnet
+  type: flat
+  physical_network: provider
+  subnet_range: 10.201.102.0/24
+  subnet_start: 10.201.102.220
+  subnet_end: 10.201.102.240
+  dns: 8.8.8.8
+  gateway: 10.201.102.1
+
+flavor:
+- name: m1.small
+  ram: 512
+  disk: 1
+  vcpus: 1
+- name: m1.medium
+  ram: 2048
+  disk: 10
+  vcpus: 2
+- name: m1.large
+  ram: 4096
+  disk: 10
+  vcpus: 2
+- name: m1.xlarge
+  ram: 4096
+  disk: 10
+  vcpus: 4
+
+private_network:
+- name: internal-0
+  subnet_name: internal-subnet-0
+  subnet_range: 192.168.0.0/24
+  dns: 8.8.8.8
+- name: internal-1
+  subnet_name: internal-subnet-1
+  subnet_range: 192.168.1.0/24
+  dns: 8.8.8.8
+
+security_group:
+  name: sg-standard
+  description: Standard Security Group
+
+router:
+  name: router

@@ -1,0 +1,18 @@
+
+- name: copy result
+  fetch:
+    src: /root/latency_{{ os_type }}-{{ vm_type }}-100m-output.json
+    dest: /root/latency_{{ os_type }}-{{ vm_type }}-100m-output.json
+    flat: yes
+
+- name: copy result
+  fetch:
+    src: /root/latency_{{ os_type }}-{{ vm_type }}-200m-output.json
+    dest: /root/latency_{{ os_type }}-{{ vm_type }}-200m-output.json
+    flat: yes
+
+- name: copy result
+  fetch:
+    src: /root/latency_{{ os_type }}-{{ vm_type }}-300m-output.json
+    dest: /root/latency_{{ os_type }}-{{ vm_type }}-300m-output.json
+    flat: yes

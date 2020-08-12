@@ -2,79 +2,43 @@
 This ansible script will provisioning OpenStack with OVN (Open Virtual Network) Enabled.
 
 ### Tested
-- OpenStack Queens
+- OpenStack Stein
 - 1 controller 3 compute
-- OpenvSwitch 1.11.0
 
-### Limitation
-- Only support single controller
-```
-zu-ovn-controller0
-Interface Management (eth0) : 10.100.100.200
+### Requirement
+- virtualbox
+- vagrant
+- ansible 2.5.5
+- terraform
 
-zu-ovn-compute0
-Interface Management (eth0) : 10.100.100.203
-Interface Data       (eth1) : 10.101.101.203
-Interface External   (eth2) : no ip address
-
-zu-ovn-compute1
-Interface Management (eth0) : 10.100.100.204
-Interface Data       (eth1) : 10.101.101.204
-Interface External   (eth2) : no ip address
-
-zu-ovn-compute2
-Interface Management (eth0) : 10.100.100.205
-Interface Data       (eth1) : 10.101.101.205
-Interface External   (eth2) : no ip address
-
-zu-ovn-bootstrap
-Interface Management (eth0) : 10.100.100.210
-```
 ### Installation
-- Setup hosts mapping
+- start vagrant
 ```
-nano /etc/hosts
+vagrant up
+```
 
-10.100.100.200 zu-ovn-controller0
-10.100.100.203 zu-ovn-compute0
-10.100.100.204 zu-ovn-compute1
-10.100.100.205 zu-ovn-compute2
+- provisioning & install openstack
 ```
-- Setup and copy key from bootstrap node to all nodes
+vagrant provision --provision-with deploy
+vagrant provision --provision-with post-deploy
 ```
-yum install sshpass
-ssh-keygen
 
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-controller0
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-compute0
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-compute1
-sshpass -p "rahasia" ssh-copy-id -o StrictHostKeyChecking=no root@zu-ovn-compute2
+- Add compute to spesific zone if necessary
 ```
-- Install ansible in bootstrap node
-```
-yum -y update
-yum -y install epel-release
-yum -y install nano git python python-pip
+vagrant ssh zu-ovn-controller-0
 
-pip install ansible==2.5.5
-```
--  Disable ansible host key checking
-```
-nano ~/.ansible.cfg
+source /root/admin_rc
+nova-manage cell_v2 discover_hosts --verbose
 
-[defaults]
-host_key_checking = False
-```
-- Clone Repository
-```
-git clone https://github.com/zufardhiyaulhaq/openstack-ovn-ansible.git
-```
-- Edit value
-```
-group_vars/all.yml
-hosts/hosts
-```
-- Run Ansible
-```
-ansible-playbook main.yml -i hosts/hosts
+openstack aggregate create compute0
+openstack aggregate create compute1
+openstack aggregate create compute2
+
+openstack aggregate set --zone compute0 compute0
+openstack aggregate set --zone compute1 compute1
+openstack aggregate set --zone compute2 compute2
+
+openstack aggregate add host compute0 zu-ovn-compute-0
+openstack aggregate add host compute1 zu-ovn-compute-1
+openstack aggregate add host compute2 zu-ovn-compute-2
 ```

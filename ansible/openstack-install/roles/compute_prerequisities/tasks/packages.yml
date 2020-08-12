@@ -1,0 +1,28 @@
+---
+
+- name: install required repos
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - centos-release-openstack-stein
+    - epel-release
+    - yum-plugin-priorities
+
+- name: update all packages
+  yum: name=* state=latest
+
+- name: install required packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - nano
+    - wget
+    - screen
+    - crudini
+    - htop
+    - net-tools
+    - chrony
+    - openstack-selinux
+    - python-openstackclient
+    - python2-openstacksdk
+    - python2-shade

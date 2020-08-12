@@ -1,0 +1,93 @@
+---
+- name: Download Ubuntu Xenial
+  get_url:
+    url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+    dest: /root/xenial-server-cloudimg-amd64-disk1.img
+
+- name: Download Ubuntu Bionic
+  get_url:
+    url: https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+    dest: /root/bionic-server-cloudimg-amd64.img
+
+- name: Download Cirros
+  get_url:
+    url: http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+    dest: /root/cirros-0.4.0-x86_64-disk.img
+
+- name: create Ubuntu Xenial image
+  os_image:
+    cloud: openstack
+    name: ubuntu-xenial
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /root/xenial-server-cloudimg-amd64-disk1.img
+    is_public: yes
+
+- name: create Ubuntu bionic image
+  os_image:
+    cloud: openstack
+    name: ubuntu-bionic
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /root/bionic-server-cloudimg-amd64.img
+    is_public: yes
+
+- name: create Cirros Image
+  os_image:
+    cloud: openstack
+    name: cirros
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /root/cirros-0.4.0-x86_64-disk.img
+    is_public: yes
+
+- name: Create External Network
+  shell: source /root/admin_rc && openstack network create --external --share --provider-physical-network {{ external_network.physical_network }} --provider-network-type {{ external_network.type }} {{ external_network.name }}
+
+- name: Create External Network Subnet
+  shell: source /root/admin_rc && openstack subnet create --network {{ external_network.name }} --subnet-range {{ external_network.subnet_range }} --allocation-pool start={{ external_network.subnet_start }},end={{ external_network.subnet_end }} --dns-nameserver {{ external_network.dns}} --gateway {{ external_network.gateway }} {{ external_network.subnet_name }}
+
+- name: Create Security Group
+  shell: source /root/admin_rc && openstack security group create {{ security_group.name }} --description '{{ security_group.description }}'
+
+- name: Create Security Group
+  shell: source /root/admin_rc && openstack security group rule create --proto icmp {{ security_group.name }}
+
+- name: Create Security Group
+  shell: source /root/admin_rc && openstack security group rule create --proto tcp {{ security_group.name }}
+
+- name: Create Security Group
+  shell: source /root/admin_rc && openstack security group rule create --proto udp {{ security_group.name }}
+
+- name: Create Flavor
+  shell: source /root/admin_rc && openstack flavor create --ram {{ item.ram }} --disk {{ item.disk }} --vcpus {{ item.vcpus}} {{ item.name }}
+  with_items: "{{ flavor }}"
+
+- name: Create Private Network
+  shell: source /root/admin_rc && openstack network create {{ item.name }}
+  with_items: "{{ private_network }}"
+
+- name: Create Private Network Subnet
+  shell: source /root/admin_rc && openstack subnet create --subnet-range {{ item.subnet_range }} --dns-nameserver {{ item.dns }} --network {{ item.name }} {{ item.subnet_name }}
+  with_items: "{{ private_network }}"
+
+- name: Create Router
+  shell: source /root/admin_rc && openstack router create {{ router.name }}
+
+- name: Set External Gateway
+  shell: source /root/admin_rc && openstack router set --external-gateway {{ external_network.name }} {{ router.name }}
+
+- name: Add Interface
+  shell: source /root/admin_rc && openstack router add subnet {{ router.name }} {{ item.subnet_name }}
+  with_items: "{{ private_network }}"
+
+- name: copy ssh key ansible into openstack
+  copy:
+    src: /root/.ssh/id_rsa.pub
+    dest: /root/ansible_rsa.pub
+
+- name: create key openstack ansible
+  shell: source /root/admin_rc && openstack keypair create --public-key /root/ansible_rsa.pub ansible-ssh

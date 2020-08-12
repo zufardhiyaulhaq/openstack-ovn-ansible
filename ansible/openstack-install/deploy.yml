@@ -1,0 +1,51 @@
+---
+- name: apply prerequisities controller
+  become: true
+  hosts: controllers
+  roles:
+  - controller_prerequisities
+
+- name: apply prerequisities compute
+  become: true
+  hosts: computes
+  roles:
+  - compute_prerequisities
+
+- name: Install Keystone and glance
+  become: true
+  hosts: controllers
+  roles:
+  - keystone
+  - placement
+  - glance
+
+- name: Install nova controller
+  become: true
+  hosts: controllers
+  roles:
+  - nova_controller
+
+- name: Install nova compute
+  become: true
+  hosts: computes
+  roles:
+  - nova_compute
+
+- name: Install neutron controller
+  become: true
+  hosts: controllers
+  roles:
+  - neutron_controller
+
+- name: Install neutron compute
+  become: true
+  hosts: computes
+  roles:
+  - neutron_compute
+
+- name: Install horizon
+  become: true
+  hosts: controllers
+  roles:
+  - horizon
+

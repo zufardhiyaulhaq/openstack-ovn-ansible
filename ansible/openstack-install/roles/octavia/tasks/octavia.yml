@@ -1,0 +1,58 @@
+---
+- name: create octavia database
+  mysql_db: name=octavia state=present login_user=root login_password={{ root_dbpw }}
+
+- name: grant octavia database local host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=octavia password={{ octavia_dbpw }} append_privs=true priv='octavia.*:ALL'
+
+- name: grant octavia database controller host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=octavia password={{ octavia_dbpw }} append_privs=true priv='octavia.*:ALL' host={{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}
+
+- name: grant octavia database any host access
+  mysql_user: login_user=root login_password={{ root_dbpw }} name=octavia password={{ octavia_dbpw }} append_privs=true priv='octavia.*:ALL' host=%
+
+- name: create octavia user
+  os_user: cloud=openstack state=present name=octavia password={{ octavia_pw }} update_password=on_create domain=default default_project=admin
+
+- name: grant admin role on the octavia user
+  os_user_role: cloud=openstack user=octavia role=admin project=service
+
+- name: create octavia service
+  os_keystone_service: cloud=openstack state=present name=octavia service_type=load-balancer description="OpenStack Load Balancer Service"
+
+- name: create octavia public endpoint
+  os_keystone_endpoint: cloud=openstack service=load-balancer endpoint_interface=public url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9876 region=RegionOne state=present
+
+- name: create octavia internal endpoint
+  os_keystone_endpoint: cloud=openstack service=load-balancer endpoint_interface=internal url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9876 region=RegionOne state=present
+
+- name: create octavia admin endpoint
+  os_keystone_endpoint: cloud=openstack service=load-balancer endpoint_interface=admin url=http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9876 region=RegionOne state=present
+
+- name: install required packages
+  yum: name="{{ packages }}" state=latest
+  vars:
+    packages:
+    - octavia-api
+    - octavia-health-manager
+    - octavia-housekeeping
+    - octavia-worker
+    - python3-octavia
+    - python3-octaviaclient
+
+- name: create octavia-api configuration file
+  template: src=octavia-api.conf.j2 dest=/etc/octavia/octavia-api.conf
+
+- name: create octavia-registry configuration file
+  template: src=octavia-registry.conf.j2 dest=/etc/octavia/octavia-registry.conf
+
+- name: populate octavia database
+  shell: octavia-manage db_sync
+  become: yes
+  become_user: octavia
+
+- name: start octavia-api service
+  service: name=openstack-octavia-api state=restarted enabled=yes
+
+- name: start octavia-registry service
+  service: name=openstack-octavia-registry state=restarted enabled=yes

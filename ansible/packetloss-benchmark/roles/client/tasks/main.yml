@@ -1,0 +1,16 @@
+- name: Install .deb package from the internet.
+  apt:
+    deb: https://iperf.fr/download/ubuntu/libiperf0_3.7-3_amd64.deb
+
+- name: Install .deb package from the internet.
+  apt:
+    deb: https://iperf.fr/download/ubuntu/iperf3_3.7-3_amd64.deb
+
+- name: Run iperf3 client packetloss 100m
+  shell: iperf3 --udp -c {{ server_local_ip }} -l 1402 -O 5 -b 100m -t 360 -V -R -J > /root/packetloss_{{ os_type }}-{{ vm_type }}-100m-output.json
+
+- name: Run iperf3 client packetloss 200m
+  shell: iperf3 --udp -c {{ server_local_ip }} -l 1402 -O 5 -b 200m -t 360 -V -R -J > /root/packetloss_{{ os_type }}-{{ vm_type }}-200m-output.json
+
+- name: Run iperf3 client packetloss 300m
+  shell: iperf3 --udp -c {{ server_local_ip }} -l 1402 -O 5 -b 300m -t 360 -V -R -J > /root/packetloss_{{ os_type }}-{{ vm_type }}-300m-output.json

@@ -1,7 +1,0 @@
-[controllers]
-zu-ovn-controller0
-
-[computes]
-zu-ovn-compute0
-zu-ovn-compute1
-zu-ovn-compute2
